@@ -1,0 +1,9 @@
+{
+  "miniprogramRoot": "./",
+  "projectname": "daily-accounting",
+  "appid": "testAppId",
+  "setting": {
+    "es6": false,
+    "minified": false
+  }
+}
