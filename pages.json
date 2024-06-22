@@ -1,9 +1,21 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
-			"path": "pages/index/index",
+			"path": "pages/home/home",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"navigationBarTitleText": "首页"
+			}
+		},
+		{
+			"path": "pages/chart/chart",
+			"style": {
+				"navigationBarTitleText": "报表"
+			}
+		},
+		{
+			"path": "pages/user/user",
+			"style": {
+				"navigationBarTitleText": "个人中心"
 			}
 		}
 	],
@@ -14,9 +26,27 @@
 		"backgroundColor": "#F8F8F8"
 	},
 	"uniIdRouter": {},
-	"easycom": {
-		"custom": {
-			"^iui-(.*)": "@/components/iui-design/components/iui-$1/iui-$1.vue"
-		}
+	"tabBar": {
+		"color": "#BFBFBF",
+		"selectedColor": "#4C5CDB",
+		"list": [{
+				"iconPath": "static/images/chart.png",
+				"selectedIconPath": "static/images/chart-active.png",
+				"pagePath": "pages/chart/chart",
+				"text": "统计"
+			},
+			{
+				"iconPath": "static/images/home.png",
+				"selectedIconPath": "static/images/home_active.png",
+				"pagePath": "pages/home/home",
+				"text": "首页"
+			},
+			{
+				"iconPath": "static/images/my.png",
+				"selectedIconPath": "static/images/my-active.png",
+				"pagePath": "pages/user/user",
+				"text": "我的"
+			}
+		]
 	}
 }

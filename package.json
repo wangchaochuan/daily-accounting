@@ -1,0 +1,16 @@
+{
+  "name": "daily-accounting",
+  "version": "0.0.1",
+  "main": "main.js",
+  "dependencies": {
+    "dayjs": "^1.11.11"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "wangchaochuan",
+  "license": "ISC",
+  "description": ""
+}
