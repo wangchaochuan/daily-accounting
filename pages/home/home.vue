@@ -1,17 +1,23 @@
 <template>
 	<view class="home">
+		<navbar-home></navbar-home>
+		<overview></overview>
 		<view class="add" @click="add">
 			<u-icon name="plus" color="#fff" :size="24"></u-icon>
 		</view>
-		<account-modal :visible="visible" @close="closeModal"></account-modal>
+		<account-modal :visible="visible" :mode="mode" @close="closeModal"></account-modal>
 	</view>
 </template>
 
 <script setup>
 	import {
-		ref
+		ref,
+		computed
 	} from 'vue'
 	import AccountModal from '@/components/account-modal.vue'
+	import NavbarHome from '@/components/navbar_home.vue';
+	import Overview from '@/components/overview.vue';
+
 	const visible = ref(false)
 	const mode = ref('create')
 	const add = () => {
@@ -21,11 +27,14 @@
 	const closeModal = () => {
 		visible.value = false;
 	}
-	const text = ref('')
 </script>
 
 <style lang="scss">
+
 	.home {
+		height: 100%;
+		background-color: $u-info-light;
+
 		.add {
 			position: fixed;
 			right: 32rpx;

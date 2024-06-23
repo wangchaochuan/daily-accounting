@@ -1,0 +1,65 @@
+{
+  "id": "3758588",
+  "name": "account",
+  "font_family": "icon",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "5858499",
+      "name": "切换",
+      "font_class": "qiehuan",
+      "unicode": "e64d",
+      "unicode_decimal": 58957
+    },
+    {
+      "icon_id": "12719946",
+      "name": "筛选",
+      "font_class": "shaixuan",
+      "unicode": "e610",
+      "unicode_decimal": 58896
+    },
+    {
+      "icon_id": "6268305",
+      "name": "发送",
+      "font_class": "paper-plane",
+      "unicode": "e647",
+      "unicode_decimal": 58951
+    },
+    {
+      "icon_id": "827994",
+      "name": "账单",
+      "font_class": "bill",
+      "unicode": "e6b8",
+      "unicode_decimal": 59064
+    },
+    {
+      "icon_id": "936744",
+      "name": "添加",
+      "font_class": "add",
+      "unicode": "e620",
+      "unicode_decimal": 58912
+    },
+    {
+      "icon_id": "3851378",
+      "name": "图表分析02",
+      "font_class": "chart",
+      "unicode": "e668",
+      "unicode_decimal": 58984
+    },
+    {
+      "icon_id": "5121692",
+      "name": "我的",
+      "font_class": "me",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "5348449",
+      "name": "借款明细",
+      "font_class": "detail",
+      "unicode": "e6a5",
+      "unicode_decimal": 59045
+    }
+  ]
+}

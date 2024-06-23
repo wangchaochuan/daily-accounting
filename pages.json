@@ -3,19 +3,20 @@
 		{
 			"path": "pages/home/home",
 			"style": {
-				"navigationBarTitleText": "首页"
+				"navigationBarTitleText": "记账本",
+				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/chart/chart",
 			"style": {
-				"navigationBarTitleText": "报表"
+				"navigationBarTitleText": "统计"
 			}
 		},
 		{
 			"path": "pages/user/user",
 			"style": {
-				"navigationBarTitleText": "个人中心"
+				"navigationBarTitleText": "我的"
 			}
 		}
 	],

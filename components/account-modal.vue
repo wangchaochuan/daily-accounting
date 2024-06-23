@@ -71,7 +71,7 @@
 	const classifyList = ref(expendClassifyList)
 	const classify = ref(expendClassifyList[0].text)
 	const today = dayjs().valueOf()
-	const minDate = dayjs().subtract(1, 'year').valueOf()
+	const minDate = dayjs().subtract(3, 'year').valueOf()
 	const formRef = ref(null)
 	const model = reactive({
 		date: today,
