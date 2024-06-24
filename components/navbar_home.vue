@@ -25,7 +25,7 @@
 	const menuHeight = computed(() => store.menu.menuHeight)
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.navbar {
 		height: 220rpx;
 		color: #fff;
