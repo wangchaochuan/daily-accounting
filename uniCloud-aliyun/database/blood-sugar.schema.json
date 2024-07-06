@@ -1,0 +1,208 @@
+// 文档教程: https://uniapp.dcloud.net.cn/uniCloud/schema
+{
+	"bsonType": "object",
+	"required": [],
+	"permission": {
+		"read": true,
+		"create": true,
+		"update": true,
+		"delete": true
+	},
+	"properties": {
+		"_id": {
+			"bsonType": "string",
+			"description": "ID，系统自动生成"
+		},
+		"date": {
+			"bsonType": "timestamp",
+			"description": "记录日期"
+		},
+		"dateStr": {
+			"bsonType": "string",
+			"description": "记录日期字符串"
+		},
+		"userId": {
+			"bsonType": "string",
+			"description": "用户ID",
+			"foreignKey": "users._id"
+		},
+		"limosis": {
+			"bsonType": "object",
+			"description": "空腹血糖情况",
+			"required": [
+				"value", "time"
+			],
+			"properties": {
+				"value": {
+					"bsonType": "double",
+					"description": "空腹血糖值",
+					"minimum": 0
+				},
+				"time": {
+					"bsonType": "string",
+					"description": "记录时间"
+				},
+				"remark": {
+					"bsonType": "string",
+					"description": "备注"
+				}
+			}
+		},
+		"afterBreakfast": {
+			"bsonType": "object",
+			"description": "早餐后两小时血糖情况",
+			"required": [
+				"value", "time"
+			],
+			"properties": {
+				"value": {
+					"bsonType": "double",
+					"description": "早餐后血糖值",
+					"minimum": 0
+				},
+				"time": {
+					"bsonType": "string",
+					"description": "记录时间"
+				},
+				"remark": {
+					"bsonType": "string",
+					"description": "备注"
+				},
+				"food": {
+					"bsonType": "string",
+					"description": "早餐吃的食物"
+				},
+				"dinnerTime": {
+					"bsonType": "string",
+					"description": "早餐吃的食物"
+				}
+			}
+		},
+		"beforeLunch": {
+			"bsonType": "object",
+			"description": "午餐前血糖情况",
+			"required": [
+				"value", "time"
+			],
+			"properties": {
+				"value": {
+					"bsonType": "double",
+					"description": "午餐前血糖值",
+					"minimum": 0
+				},
+				"time": {
+					"bsonType": "string",
+					"description": "记录时间"
+				},
+				"remark": {
+					"bsonType": "string",
+					"description": "备注"
+				}
+			}
+		},
+		"afterLunch": {
+			"bsonType": "object",
+			"description": "午餐后两小时血糖情况",
+			"required": [
+				"value", "time"
+			],
+			"properties": {
+				"value": {
+					"bsonType": "double",
+					"description": "午餐后血糖值",
+					"minimum": 0
+				},
+				"time": {
+					"bsonType": "string",
+					"description": "记录时间"
+				},
+				"remark": {
+					"bsonType": "string",
+					"description": "备注"
+				},
+				"food": {
+					"bsonType": "string",
+					"description": "午餐吃的食物"
+				},
+				"dinnerTime": {
+					"bsonType": "string",
+					"description": "午餐时间"
+				}
+			}
+		},
+		"beforeDinner": {
+			"bsonType": "object",
+			"description": "晚餐前血糖情况",
+			"required": [
+				"value", "time"
+			],
+			"properties": {
+				"value": {
+					"bsonType": "double",
+					"description": "晚餐前血糖值",
+					"minimum": 0
+				},
+				"time": {
+					"bsonType": "string",
+					"description": "记录时间"
+				},
+				"remark": {
+					"bsonType": "string",
+					"description": "备注"
+				}
+			}
+		},
+		"afterDinner": {
+			"bsonType": "object",
+			"description": "晚餐后血糖情况",
+			"required": [
+				"value", "time"
+			],
+			"properties": {
+				"value": {
+					"bsonType": "double",
+					"description": "晚餐后血糖值",
+					"minimum": 0
+				},
+				"time": {
+					"bsonType": "string",
+					"description": "记录时间"
+				},
+				"remark": {
+					"bsonType": "string",
+					"description": "备注"
+				},
+				"food": {
+					"bsonType": "string",
+					"description": "dinner food"
+				},
+				"dinnerTime": {
+					"bsonType": "string",
+					"description": "dinner time"
+				}
+			}
+		},
+		"beforeSleep": {
+			"bsonType": "object",
+			"description": "睡前血糖情况",
+			"required": [
+				"value", "time"
+			],
+			"properties": {
+				"value": {
+					"bsonType": "double",
+					"description": "睡前血糖值",
+					"minimum": 0
+				},
+				"time": {
+					"bsonType": "string",
+					"description": "记录时间"
+				},
+				"remark": {
+					"bsonType": "string",
+					"description": "备注"
+				}
+			}
+		}
+	}
+}

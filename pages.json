@@ -4,19 +4,40 @@
 			"path": "pages/home/home",
 			"style": {
 				"navigationBarTitleText": "记账本",
-				"navigationStyle": "custom"
+				"navigationStyle": "custom",
+				"disableScroll": true
 			}
 		},
 		{
 			"path": "pages/chart/chart",
 			"style": {
-				"navigationBarTitleText": "统计"
+				"navigationBarTitleText": "统计",
+				"navigationBarTextStyle": "white",
+				"navigationBarBackgroundColor": "#2979ff"
 			}
 		},
 		{
 			"path": "pages/user/user",
 			"style": {
-				"navigationBarTitleText": "我的"
+				"navigationBarTitleText": "个人中心",
+				"navigationBarTextStyle": "white",
+				"navigationBarBackgroundColor": "#2979ff"
+			}
+		},
+		{
+			"path": "pages/user-detail/user-detail",
+			"style": {
+				"navigationBarTitleText": "个人信息",
+				"navigationBarTextStyle": "white",
+				"navigationBarBackgroundColor": "#2979ff"
+			}
+		},
+		{
+			"path": "pages/book/book",
+			"style": {
+				"navigationBarTitleText": "账本管理",
+				"navigationBarTextStyle": "white",
+				"navigationBarBackgroundColor": "#2979ff"
 			}
 		}
 	],

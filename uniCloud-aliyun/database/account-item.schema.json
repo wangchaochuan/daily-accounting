@@ -1,0 +1,75 @@
+// 文档教程: https://uniapp.dcloud.net.cn/uniCloud/schema
+// 青牛记账 账单表
+{
+	"bsonType": "object",
+	"required": ["amount", "bookId", "classify", "creator", "createTime", "date", "type"],
+	"permission": {
+		"read": true,
+		"create": true,
+		"update": true,
+		"delete": true
+	},
+	"properties": {
+		"_id": {
+			"description": "ID，系统自动生成"
+		},
+		"bookId": {
+			"bsonType": "string",
+			"description": "关联的账本id",
+			"foreignKey": "account-book._id"
+		},
+		"amount": {
+			"bsonType": "double",
+			"description": "金额"
+		},
+		"classify": {
+			"bsonType": "string",
+			"description": "分类"
+		},
+		"creator": {
+			"bsonType": "string",
+			"foreignKey": "account-users._id",
+			"description": "该条账单创建者"
+		},
+		"createTime": {
+			"bsonType": "date",
+			"description": "该条账单创建时间"
+		},
+		"updater": {
+			"bsonType": "string",
+			"foreignKey": "account-users._id",
+			"description": "该条账单更新者"
+		},
+		"updateTime": {
+			"bsonType": "timestamp",
+			"description": "该条账单创建时间",
+			"forceDefaultValue": {
+				"$env": "now"
+			}
+		},
+		"date": {
+			"bsonType": "date",
+			"description": "时间"
+		},
+		"remark": {
+			"bsonType": "string",
+			"description": "备注"
+		},
+		"tag": {
+			"bsonType": "string",
+			"description": "标签"
+		},
+		"type": {
+			"bsonType": "string",
+			"defaultValue": "expend",
+			"description": "分类：expend-支出  income-收入",
+			"enum": [{
+				"text": "支出",
+				"value": "expend"
+			}, {
+				"text": "收入",
+				"value": "income"
+			}]
+		}
+	}
+}

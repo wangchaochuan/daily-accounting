@@ -1,5 +1,5 @@
 <template>
-	<u-popup :show="visible" :closeable="true" :closeOnClickOverlay="false" :round="24" @close="close" @open="open">
+	<u-popup :show="visible" :closeable="true" :closeOnClickOverlay="false" :round="24" @close="close">
 		<view class="content">
 			<view class="title">{{mode==='create'?'新增账目':'修改账目'}}</view>
 			<view class="type">
@@ -91,7 +91,6 @@
 	const close = () => {
 		emits('close')
 	}
-	const open = () => {}
 
 	const cancel = () => {
 		close()

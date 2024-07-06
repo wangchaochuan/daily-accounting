@@ -1,0 +1,42 @@
+// 文档教程: https://uniapp.dcloud.net.cn/uniCloud/schema
+// 青牛记账 月度账单表
+{
+	"bsonType": "object",
+	"required": ["bookId", "month"],
+	"permission": {
+		"read": true,
+		"create": true,
+		"update": true,
+		"delete": true
+	},
+	"properties": {
+		"_id": {
+			"description": "ID，系统自动生成"
+		},
+		"bookId": {
+			"bsonType": "string",
+			"description": "关联的账本id",
+			"foreignKey": "account-book._id"
+		},
+		"month": {
+			"bsonType": "string",
+			"description": "月份 如 2024-06"
+		},
+		"totalExpend": {
+			"bsonType": "double",
+			"description": "月度总支出金额"
+		},
+		"totalIncome": {
+			"bsonType": "double",
+			"description": "月度总收入金额"
+		},
+		"budget": {
+			"bsonType": "double",
+			"description": "月度预算金额"
+		},
+		"summary": {
+			"bsonType": "string",
+			"defaultValue": "月度总结"
+		}
+	}
+}

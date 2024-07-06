@@ -1,8 +1,11 @@
 <script setup>
 	import {
-		onShow
+		onShow,
+		onLaunch
 	} from '@dcloudio/uni-app'
 	import useMenuStore from '@/store/menu.js'
+
+	const CO = uniCloud.importObject("account-co");
 	const store = useMenuStore()
 	onShow(() => {
 		uni.getSystemInfo({
@@ -37,6 +40,32 @@
 				// #endif
 			}
 		})
+	})
+
+	onLaunch(async () => {
+		// #ifdef MP-WEIXIN
+		const user = uni.getStorageSync("user")
+		// 缓存中已经有用户信息了,就不再需要从接口读取
+		if (user?._id) return;
+		const {
+			code
+		} = await uni.login({
+			provider: "weixin"
+		});
+		if (!code) {
+			return;
+		}
+		// 获取微信用户openId
+		// const {
+		// 	openid
+		// } = await CO.getOpenId(code);
+		// if (!openid) return
+		// 注册用户并返回注册的用户信息,如果已经注册过了不会重复注册
+		const {
+			data
+		} = await CO.registerUser(code)
+		uni.setStorageSync("user", data.user)
+		// #endif
 	})
 </script>
 

@@ -1,13 +1,13 @@
 <template>
 	<view>
-		
+
 	</view>
 </template>
 
 <script setup>
-	
+
 </script>
 
-<style>
-	       
+<style lang="scss" scoped>
+
 </style>

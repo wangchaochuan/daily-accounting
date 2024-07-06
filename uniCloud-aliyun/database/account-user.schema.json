@@ -1,0 +1,35 @@
+// 青牛记账用户表
+{
+	"bsonType": "object",
+	"required": ["avatar", "nick_name", "register_date"],
+	"permission": {
+		"read": true,
+		"create": true,
+		"update": true,
+		"delete": false
+	},
+	"properties": {
+		"_id": {
+			"description": "ID，系统自动生成"
+		},
+		"mp_wx_openid": {
+			"bsonType": "string",
+			"description": "微信小程序平台openid"
+		},
+		"register_date": {
+			"bsonType": "date",
+			"description": "注册时间"
+		},
+		"nick_name": {
+			"bsonType": "string",
+			"description": "昵称",
+			"title": "昵称",
+			"defaultValue": "微信用户"
+		},
+		"avatar": {
+			"bsonType": "file",
+			"description": "用file类型方便使用uni-file-picker组件",
+			"title": "头像文件"
+		}
+	}
+}

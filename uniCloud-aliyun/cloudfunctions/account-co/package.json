@@ -1,0 +1,9 @@
+{
+  "name": "account-co",
+  "dependencies": {
+    "dayjs": "^1.11.11"
+  },
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

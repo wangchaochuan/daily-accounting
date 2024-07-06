@@ -1,0 +1,105 @@
+// 文档教程: https://uniapp.dcloud.net.cn/uniCloud/schema
+{
+	"bsonType": "object",
+	"required": [],
+	"permission": {
+		"read": true,
+		"create": true,
+		"update": true,
+		"delete": false
+	},
+	"properties": {
+		"_id": {
+			"description": "ID，系统自动生成"
+		},
+		"user": {
+			"bsonType": "string",
+			"description": "用户ID",
+			"foreignKey": "users._id"
+		},
+		"limosis": {
+			"bsonType": "object",
+			"description": "空腹血糖目标值",
+			"properties": {
+				"low": {
+					"bsonType": "string",
+					"description": "血糖偏低阈值",
+					"defaultValue": "3.9"
+				},
+				"normal": {
+					"bsonType": "string",
+					"description": "血糖正常阈值",
+					"defaultValue": "6.1"
+				},
+				"high": {
+					"bsonType": "string",
+					"description": "血糖偏高阈值",
+					"defaultValue": "7.0"
+				}
+			}
+		},
+		"beforeMeal": {
+			"bsonType": "object",
+			"description": "餐前血糖目标值",
+			"properties": {
+				"low": {
+					"bsonType": "string",
+					"description": "血糖偏低阈值",
+					"defaultValue": "3.9"
+				},
+				"normal": {
+					"bsonType": "string",
+					"description": "血糖正常阈值",
+					"defaultValue": "6.1"
+				},
+				"high": {
+					"bsonType": "string",
+					"description": "血糖偏高阈值",
+					"defaultValue": "7.0"
+				}
+			}
+		},
+		"afterMeal": {
+			"bsonType": "object",
+			"description": "餐后血糖目标值",
+			"properties": {
+				"low": {
+					"bsonType": "string",
+					"description": "血糖偏低阈值",
+					"defaultValue": "4.4"
+				},
+				"normal": {
+					"bsonType": "string",
+					"description": "血糖正常阈值",
+					"defaultValue": "7.8"
+				},
+				"high": {
+					"bsonType": "string",
+					"description": "血糖偏高阈值",
+					"defaultValue": "11.1"
+				}
+			}
+		},
+		"beforeSleep": {
+			"bsonType": "object",
+			"description": "睡前血糖目标值",
+			"properties": {
+				"low": {
+					"bsonType": "string",
+					"description": "血糖偏低阈值",
+					"defaultValue": "3.9"
+				},
+				"normal": {
+					"bsonType": "string",
+					"description": "血糖正常阈值",
+					"defaultValue": "6.1"
+				},
+				"high": {
+					"bsonType": "string",
+					"description": "血糖偏高阈值",
+					"defaultValue": "7.0"
+				}
+			}
+		}
+	}
+}
