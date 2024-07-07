@@ -3,10 +3,15 @@
 		onShow,
 		onLaunch
 	} from '@dcloudio/uni-app'
-	import useMenuStore from '@/store/menu.js'
+	import useMenuStore from '@/store/menu.js';
+	import useUserStore from '@/store/user.js';
+	import useBookStore from '@/store/book.js';
 
 	const CO = uniCloud.importObject("account-co");
-	const store = useMenuStore()
+	const menuStore = useMenuStore()
+	const userStore = useUserStore()
+	const bookStore = useBookStore()
+
 	onShow(() => {
 		uni.getSystemInfo({
 			success(result) {
@@ -36,7 +41,7 @@
 					menuTop: menuTop, //右侧的胶囊顶部距离屏幕顶部的距离--用来给自定义导航条页面的左侧胶囊设置使用
 					contentTop: contentTop, //内容区距离页面最上方的高度--用来给自定义导航条页面的内容区定位距离使用
 				}
-				store.setMenu(menuInfo);
+				menuStore.setMenu(menuInfo);
 				// #endif
 			}
 		})
@@ -44,27 +49,47 @@
 
 	onLaunch(async () => {
 		// #ifdef MP-WEIXIN
-		const user = uni.getStorageSync("user")
+		const user = uni.getStorageSync("user");
+		let userId = user?._id;
 		// 缓存中已经有用户信息了,就不再需要从接口读取
-		if (user?._id) return;
-		const {
-			code
-		} = await uni.login({
-			provider: "weixin"
-		});
-		if (!code) {
-			return;
+		if (!userId) {
+			const {
+				code
+			} = await uni.login({
+				provider: "weixin"
+			});
+			if (!code) {
+				return;
+			}
+			// 注册用户并返回注册的用户信息,如果已经注册过了不会重复注册
+			const {
+				data
+			} = await CO.registerUser(code)
+			userStore.setUser(data.user);
+			userId = data.user._id;
+		} else {
+			userStore.setUser(user);
 		}
-		// 获取微信用户openId
-		// const {
-		// 	openid
-		// } = await CO.getOpenId(code);
-		// if (!openid) return
-		// 注册用户并返回注册的用户信息,如果已经注册过了不会重复注册
-		const {
-			data
-		} = await CO.registerUser(code)
-		uni.setStorageSync("user", data.user)
+		const books = uni.getStorageSync("books");
+		let currentBookId = uni.getStorageSync("currentBookId");
+		if (!books) {
+			const response = await CO.getBooks(userId)
+			if (Array.isArray(response.data)) {
+				const list = response.data.map(v => {
+					return {
+						...v,
+						members: v.members.map(m => m?.avatar?.url)
+					}
+				})
+				bookStore.setBooks(list);
+				if (!currentBookId) {
+					currentBookId = list?.[0]?._id;
+				}
+			}
+		} else {
+			bookStore.setBooks(books);
+		}
+		bookStore.setBookId(currentBookId)
 		// #endif
 	})
 </script>

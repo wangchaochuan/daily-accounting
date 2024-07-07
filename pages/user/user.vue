@@ -43,16 +43,24 @@
 
 <script setup>
 	import {
-		ref
+		computed,
 	} from 'vue'
 	import {
 		onShow
 	} from '@dcloudio/uni-app'
+	import useUserStore from '@/store/user.js';
 
-	const defaultAvatar = "https://uview-plus.jiangruyi.com/h5/static/uview/album/noExist.jpg";
+	const userStore = useUserStore()
+	const user = computed(() => userStore.user)
+	const defaultAvatarUrl = "https://uview-plus.jiangruyi.com/h5/static/uview/album/noExist.jpg";
 	// const defaultAvatar = "https://uview-plus.jiangruyi.com/h5/static/uview/album/6.jpg";
-	const src = ref("")
-	const username = ref('')
+	const src = computed(() => {
+		if (user.value?.avatar?.url) {
+			return user.value?.avatar?.url
+		}
+		return defaultAvatarUrl;
+	})
+	const username = computed(() => user.value.nick_name);
 
 	const navigate = (url) => {
 		uni.navigateTo({
@@ -64,15 +72,8 @@
 		navigate('/pages/user-detail/user-detail')
 	}
 	const jumpToBook = () => {
-		const user = uni.getStorageSync("user");
-		navigate(`/pages/book/book?userId=${user._id}`)
+		navigate(`/pages/book/book?userId=${user.value._id}`)
 	}
-
-	onShow(() => {
-		const user = uni.getStorageSync("user");
-		src.value = user?.avatar?.url ? user.avatar?.url : defaultAvatar;
-		username.value = user.nick_name
-	})
 </script>
 
 <style lang="scss" scoped>

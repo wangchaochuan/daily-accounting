@@ -2,8 +2,8 @@
 	<view class="navbar">
 		<view class="title">青牛记账</view>
 		<view class="content">
-			<view class="account">
-				<view class="text">默认账本</view>
+			<view class="account" @click="showBookPicker=true">
+				<view class="text">{{bookName}}</view>
 				<text class="iconfont">&#xe64d;</text>
 			</view>
 			<view class="filter">
@@ -11,18 +11,51 @@
 				<text class="text">筛选</text>
 			</view>
 		</view>
+		<u-picker :show="showBookPicker" :columns="books" keyName="name" title="选择账本" @cancel="closePicker"
+			@confirm="confirmPicker"></u-picker>
 	</view>
 
 </template>
 
 <script setup>
 	import {
-		computed
-	} from 'vue'
-	import useMenuStore from '@/store/menu.js'
+		ref,
+		computed,
+		watch,
+	} from 'vue';
+	import useMenuStore from '@/store/menu.js';
+	import useBookStore from '@/store/book.js';
 	const store = useMenuStore()
+	const bookStore = useBookStore()
 	const menuTop = computed(() => store.menu.menuTop)
 	const menuHeight = computed(() => store.menu.menuHeight)
+
+	const books = computed(() => [bookStore.books])
+	const bookId = computed({
+		get: () => bookStore.bookId,
+		set: (val) => {
+			bookStore.setBookId(val)
+		}
+	})
+	const bookName = ref('');
+	watch([books, bookId], ([list, id]) => {
+		if (list?.[0] && id) {
+			const book = list[0].find(v => v._id === id)
+			bookName.value = book.name;
+		}
+	}, {
+		immediate: true
+	})
+
+	const showBookPicker = ref(false)
+	const confirmPicker = (data) => {
+		const item = data.value[0];
+		bookId.value = item._id;
+		showBookPicker.value = false;
+	}
+	const closePicker = () => {
+		showBookPicker.value = false;
+	}
 </script>
 
 <style lang="scss" scoped>

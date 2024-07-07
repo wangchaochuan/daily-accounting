@@ -15,7 +15,7 @@
 					<view class="delete" v-show="book._id!==activeBook">
 						<u-button @click="showDeleteModal(book)">删除</u-button>
 					</view>
-					<view class="edit" v-if="book.creator===user">
+					<view class="edit" v-if="book.creator===userId">
 						<u-button @click="editBook(book)">编辑</u-button>
 					</view>
 					<view class="invite" v-if="book.type==='public'">
@@ -40,17 +40,32 @@
 
 <script setup>
 	import {
-		ref
+		ref,
+		computed,
 	} from 'vue';
 	import {
 		onLoad
 	} from '@dcloudio/uni-app';
 	import BookModal from '@/components/book-modal.vue';
+	import useUserStore from '@/store/user.js';
+	import useBookStore from '@/store/book.js';
 
+	const userStore = useUserStore()
+	const bookStore = useBookStore()
 	const CO = uniCloud.importObject("account-co");
-	const books = ref([])
-	const activeBook = ref("");
-	const user = ref("")
+	const books = computed({
+		get: () => bookStore.books,
+		set: (val) => {
+			bookStore.setBooks(val)
+		}
+	})
+	const activeBook = computed({
+		get: () => bookStore.bookId,
+		set: (val) => {
+			bookStore.setBookId(val)
+		}
+	});
+	const userId = computed(() => userStore.user._id)
 	const bookId = ref("");
 
 	const showModal = ref(false)
@@ -63,7 +78,6 @@
 
 	const setBook = (id) => {
 		activeBook.value = id;
-		uni.setStorageSync("currentBookId", id)
 	}
 
 	const showDeleteModal = (book) => {
@@ -86,7 +100,7 @@
 	const deleteBook = async () => {
 		await CO.deleteBook(bookId.value)
 		showModal.value = false
-		loadBooks(user.value)
+		loadBooks(userId.value)
 	}
 
 	const loadBooks = async (userId) => {
@@ -101,30 +115,12 @@
 					members: v.members.map(m => m?.avatar?.url)
 				}
 			})
-			uni.setStorageSync("books", books.value);
-			const id = uni.getStorageSync("currentBookId")
-			if (id) {
-				activeBook.value = id;
-			} else {
-				const bookId = books.value?.[0]?._id;
-				if (bookId) {
-					activeBook.value = bookId;
-					uni.setStorageSync("currentBookId", bookId)
-				}
-			}
 		}
-
-
 	}
 
 	const handleSuccess = () => {
-		loadBooks(user.value)
+		loadBooks(userId.value)
 	}
-	onLoad(async (options) => {
-		const userId = options.userId;
-		user.value = userId;
-		loadBooks(userId)
-	})
 </script>
 
 <style lang="scss" scoped>

@@ -38,18 +38,24 @@
 	import {
 		ref,
 		computed,
-		nextTick
+		nextTick,
+		onMounted
 	} from 'vue'
 	import {
 		onShow
 	} from '@dcloudio/uni-app'
 	import UserModal from "@/components/user-modal.vue"
+	import useUserStore from '@/store/user.js';
 
+	const userStore = useUserStore()
 	const visible = ref(false)
-	const user = ref({})
+	const user = computed(() => userStore.user)
 	const defaultAvatar = "https://uview-plus.jiangruyi.com/h5/static/uview/album/noExist.jpg";
 	const src = computed(() => {
-		return user.value?.avatar?.url ? user.value.avatar.url : defaultAvatar
+		if (user.value?.avatar?.url) {
+			return user.value?.avatar?.url
+		}
+		return defaultAvatarUrl;
 	})
 	const updateUser = ({
 		avatar,
@@ -60,11 +66,9 @@
 			avatar,
 			nick_name
 		}
-		uni.setStorageSync("user", newUser)
-		user.value = newUser;
+		userStore.setUser(newUser)
 	}
 	const handleCopy = () => {
-		console.log("copy")
 		uni.setClipboardData({
 			data: user.value._id,
 			success: function() {
@@ -80,25 +84,12 @@
 			}
 		});
 	}
-	onShow(() => {
+	onMounted(() => {
 		uni.showLoading()
-		uni.getStorage({
-			key: 'user',
-			success(res) {
-				user.value = res.data
-
-			},
-			complete() {
-				const timer = setTimeout(() => {
-					nextTick(() => {
-						uni.hideLoading()
-					})
-					clearTimeout(timer)
-				}, 1800)
-			}
-		})
-		// const u = uni.getStorageSync("user");
-		// user.value = u;
+		const timer = setTimeout(() => {
+			uni.hideLoading()
+			clearTimeout(timer)
+		}, 1800)
 	})
 </script>
 
