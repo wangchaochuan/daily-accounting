@@ -9,7 +9,7 @@
 				</view>
 				<view class="body">
 					<view class="label">当前成员:</view>
-					<u-avatar-group :urls="book.members" size="36" gap="0.2"></u-avatar-group>
+					<u-avatar-group :urls="getUrls(book)" size="36" gap="0.2"></u-avatar-group>
 				</view>
 				<view class="footer">
 					<view class="delete" v-show="book._id!==activeBook">
@@ -67,6 +67,10 @@
 	});
 	const userId = computed(() => userStore.user._id)
 	const bookId = ref("");
+
+	const getUrls = (book) => {
+		return book.members.map(v => v.url)
+	}
 
 	const showModal = ref(false)
 	const title = ref("确认删除?")

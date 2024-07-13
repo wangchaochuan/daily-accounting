@@ -1,8 +1,8 @@
 <template>
 	<view class="classify-list">
-		<view v-for="item in list" :key="item.text" class="classify-item" :class="{'active':item.text===modelValue}"
-			@click="changeClassify(item.text)">
-			<view class="text">{{item.text}}</view>
+		<view v-for="(item,index) in list" :key="index" class="classify-item" :class="{'active':item===modelValue}"
+			@click="changeClassify(item)">
+			<view class="text">{{item}}</view>
 		</view>
 	</view>
 </template>

@@ -23,8 +23,9 @@ async function getBooks(userId) {
 				members: "$members"
 			},
 			pipeline: $.pipeline().match(dbCmd.expr($.in(['$_id', '$$members']))).project({
-				_id: 0,
-				"avatar.url": 1
+				_id: 1,
+				"avatar.url": 1,
+				"nick_name": 1,
 			}).done(),
 			as: 'members'
 		}).end();

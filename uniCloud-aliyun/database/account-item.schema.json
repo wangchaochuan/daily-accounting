@@ -51,6 +51,10 @@
 			"bsonType": "date",
 			"description": "时间"
 		},
+		"datetime": {
+			"bsonType": "timestamp",
+			"description": "时间戳"
+		},
 		"remark": {
 			"bsonType": "string",
 			"description": "备注"

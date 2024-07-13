@@ -11,6 +11,20 @@ const {
 	deleteBook,
 	updateBook,
 } = require("./book.js")
+const {
+	getMonthData,
+	updateMonthBudget,
+	updateMonthSummary,
+	updateMonthTotalExpend,
+	updateMonthTotalIncome
+} = require("./month.js")
+const {
+	creatRecord,
+	getRecordList,
+	getRecordById,
+	deleteRecord,
+	updateRecord
+} = require("./record.js")
 //获取数据库对象
 const db = uniCloud.database();
 // user表
@@ -52,16 +66,21 @@ module.exports = {
 	 * @@return {Object} user   注册的用户信息
 	 */
 	registerUser,
-	/**
-	 * @description 查询该用户下所有账本
-	 * @@param {string} userId    用户ID
-	 * @@return {Array} books   所有的账本信息
-	 */
+	// 账本相关接口
 	getBooks,
-	/**
-	 * @description 新增账本
-	 */
 	createBook,
 	deleteBook,
-	updateBook
+	updateBook,
+	// 月份相关接口
+	getMonthData,
+	updateMonthBudget,
+	updateMonthSummary,
+	updateMonthTotalExpend,
+	updateMonthTotalIncome,
+	// 账单记录相关接口
+	creatRecord,
+	getRecordList,
+	getRecordById,
+	deleteRecord,
+	updateRecord
 }

@@ -6,13 +6,13 @@
 				<view class="text">{{bookName}}</view>
 				<text class="iconfont">&#xe64d;</text>
 			</view>
-			<view class="filter">
+			<!-- <view class="filter">
 				<text class="iconfont">&#xe610;</text>
 				<text class="text">筛选</text>
-			</view>
+			</view> -->
 		</view>
-		<u-picker :show="showBookPicker" :columns="books" keyName="name" title="选择账本" @cancel="closePicker"
-			@confirm="confirmPicker"></u-picker>
+		<u-picker :show="showBookPicker" :columns="books" :defaultIndex="defaultIndex" keyName="name" title="选择账本"
+			@cancel="closePicker" @confirm="confirmPicker"></u-picker>
 	</view>
 
 </template>
@@ -25,6 +25,7 @@
 	} from 'vue';
 	import useMenuStore from '@/store/menu.js';
 	import useBookStore from '@/store/book.js';
+	
 	const store = useMenuStore()
 	const bookStore = useBookStore()
 	const menuTop = computed(() => store.menu.menuTop)
@@ -36,6 +37,10 @@
 		set: (val) => {
 			bookStore.setBookId(val)
 		}
+	})
+	const defaultIndex = computed(() => {
+		const index = bookStore.books.findIndex(v => v._id === bookId.value)
+		return [index]
 	})
 	const bookName = ref('');
 	watch([books, bookId], ([list, id]) => {

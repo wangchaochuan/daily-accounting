@@ -39,6 +39,14 @@
 				"navigationBarTextStyle": "white",
 				"navigationBarBackgroundColor": "#2979ff"
 			}
+		},
+		{
+			"path": "pages/record-detail/record-detail",
+			"style": {
+				"navigationBarTitleText": "详情",
+				"navigationBarTextStyle": "white",
+				"navigationBarBackgroundColor": "#2979ff"
+			}
 		}
 	],
 	"globalStyle": {

@@ -78,7 +78,11 @@
 				const list = response.data.map(v => {
 					return {
 						...v,
-						members: v.members.map(m => m?.avatar?.url)
+						members: v.members.map(m => ({
+							id: m._id,
+							name: m.nick_name,
+							url: m.avatar?.url
+						}))
 					}
 				})
 				bookStore.setBooks(list);

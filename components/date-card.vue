@@ -5,7 +5,7 @@
 			<view class="right">{{expend}}</view>
 		</view>
 		<view class="content">
-			<view class="item" v-for="item in data" :key="item.id">
+			<view class="item" v-for="item in data" :key="item._id" @click="jump(item._id)">
 				<view class="left">
 					<view class="classify">
 						<text class="text">{{item.classify}}</text>
@@ -47,8 +47,13 @@
 		expendList.forEach(v => {
 			sum += v.amount
 		})
-		return sum === 0 ? '' : `支出:￥${sum}`
+		return sum === 0 ? '' : `支出:￥${sum.toFixed(2)}`
 	})
+	const jump = (id) => {
+		uni.navigateTo({
+			url: `/pages/record-detail/record-detail?id=${id}`
+		})
+	}
 </script>
 
 <style lang="scss">

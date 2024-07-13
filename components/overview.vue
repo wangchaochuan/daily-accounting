@@ -12,13 +12,13 @@
 			<view class="expend">
 				<view class="label">支出</view>
 				<view class="value">
-					<u-text mode="price" type="error" bold :size="16" text="2345.1"></u-text>
+					<u-text mode="price" type="error" bold :size="16" :text="totalExpend"></u-text>
 				</view>
 			</view>
 			<view class="income">
 				<view class="label">收入</view>
 				<view class="value">
-					<u-text mode="price" type="success" bold :size="16" text="29345.1"></u-text>
+					<u-text mode="price" type="success" bold :size="16" :text="totalIncome"></u-text>
 				</view>
 			</view>
 		</view>
@@ -27,26 +27,27 @@
 				<view class="origin">
 					<view class="label">本月预算:</view>
 					<view class="value">
-						<u-text mode="price" type="primary" bold :size="16" text="23495.1"></u-text>
+						<u-text mode="price" type="primary" bold :size="16" :text="budget"></u-text>
 					</view>
 				</view>
 				<view class="rest">
 					<view class="label">剩余预算:</view>
 					<view class="value">
-						<u-text mode="price" type="warning" bold :size="16" text="20345.1"></u-text>
+						<u-text mode="price" type="warning" bold :size="16" :text="restBudget"></u-text>
 					</view>
 				</view>
 			</view>
 			<view class="progress">
-				<view class="text">本月已用预算<text class="value">48%</text></view>
-				<u-line-progress :percentage="48" height="8"></u-line-progress>
+				<view class="text">本月已用预算<text class="value">{{progress}}</text></view>
+				<u-line-progress :percentage="percentage" height="8"></u-line-progress>
 			</view>
+			<view class="update_budget" @click="showModal=true">修改本月预算</view>
 		</template>
 		<view class="set_budget" v-else @click="showModal=true">设置本月预算</view>
 		<view class="surplus">
 			<view class="label">本月结余:</view>
 			<view class="value">
-				<u-text mode="price" type="primary" bold :size="16" text="-23495.1"></u-text>
+				<u-text mode="price" type="primary" bold :size="16" :text="rest"></u-text>
 			</view>
 		</view>
 		<u-datetime-picker mode="year-month" :show="showDatePicker" v-model="date" :min-date="minDate"
@@ -60,9 +61,18 @@
 
 <script setup>
 	import {
-		ref
+		ref,
+		computed,
+		watchEffect,
+		onMounted,
+		onUnmounted
 	} from 'vue'
 	import dayjs from 'dayjs'
+	import useBookStore from '@/store/book.js';
+
+	const CO = uniCloud.importObject("account-co");
+	const bookStore = useBookStore()
+	const bookId = computed(() => bookStore.bookId)
 	const today = dayjs();
 	const maxDate = today.valueOf();
 	const minDate = today.subtract(3, 'year').valueOf()
@@ -77,15 +87,69 @@
 		showDatePicker.value = false
 	}
 
+	const id = ref('')
 	const budget = ref(0)
+	const totalExpend = ref(0)
+	const totalIncome = ref(0)
 	const showModal = ref(false)
 	const new_budget = ref()
-	const changeBudget = () => {
-		if (new_budget.value > 0) {
+	const restBudget = computed(() => {
+		return budget.value - totalExpend.value
+	})
+	const percentage = computed(() => {
+		if (budget.value === 0) return 0;
+		return totalExpend.value / budget.value * 100
+	})
+	const progress = computed(() => {
+		return percentage.value.toFixed(2) + '%'
+	})
+	const rest = computed(() => {
+		return totalIncome.value - totalExpend.value;
+	})
+	const changeBudget = async () => {
+		if (new_budget.value >= 0) {
 			budget.value = new_budget.value
+			await CO.updateMonthBudget(id.value, Number(new_budget.value))
 		}
 		showModal.value = false
 	}
+
+	const getData = async () => {
+		if (year.value && month.value && bookId.value) {
+			const date = `${year.value}-${month.value}`
+			bookStore.setSelectMonth(date);
+			const {
+				data
+			} = await CO.getMonthData(date, bookId.value);
+			id.value = data._id;
+			budget.value = data.budget;
+			new_budget.value = data.budget;
+			totalExpend.value = data.totalExpend
+			totalIncome.value = data.totalIncome
+		}
+	}
+	watchEffect(() => {
+		getData()
+	})
+
+	onMounted(() => {
+		uni.$on("changeMonthTotal", async ({
+			type,
+			amount,
+			action
+		}) => {
+			if (type === "expend") {
+				totalExpend.value = totalExpend.value + amount;
+				await CO.updateMonthTotalExpend(id.value, amount)
+			} else {
+				totalIncome.value = totalIncome.value + amount;
+				await CO.updateMonthTotalIncome(id.value, amount)
+			}
+		})
+	})
+	onUnmounted(() => {
+		uni.$off("changeMonthTotal")
+	})
 </script>
 
 <style lang="scss">
@@ -185,6 +249,14 @@
 					margin-left: 8rpx;
 				}
 			}
+		}
+
+		.update_budget {
+			padding: 16rpx 32rpx;
+			padding-bottom: 0;
+			font-size: 28rpx;
+			color: $u-content-color;
+			margin-right: 8rpx;
 		}
 
 		.set_budget {
