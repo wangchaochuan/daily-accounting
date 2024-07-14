@@ -1,5 +1,5 @@
 <template>
-	<view class="container">
+	<scroll-view class="container" scroll-y>
 		<view class="overview">
 			<view class="header">
 				<view class="date" @click="showDatePicker=true">
@@ -22,6 +22,20 @@
 					</view>
 				</view>
 			</view>
+			<template v-if="monthData.budget>0">
+				<view class="budget">
+					<view class="origin">
+						<view class="label">本月预算:</view>
+						<view class="value">
+							<u-text mode="price" type="primary" bold :size="16" :text="monthData.budget"></u-text>
+						</view>
+					</view>
+				</view>
+				<view class="progress">
+					<view class="text">本月所用预算<text class="value">{{progress}}</text></view>
+					<u-line-progress :percentage="percentage" height="8"></u-line-progress>
+				</view>
+			</template>
 			<view class="surplus">
 				<view class="label">本月结余:</view>
 				<view class="value">
@@ -29,100 +43,52 @@
 				</view>
 			</view>
 		</view>
-		<scroll-view scroll-y>
-			<view class="classify-chart">
-				<view class="title">
-					<u-text text="分类支出比例" bold :size="18" :line-height="24"></u-text>
-				</view>
-				<view class="empty" v-if="classifyData.length===0">
-					<u-empty text="暂无数据"></u-empty>
-				</view>
-				<view class="charts-box" v-else>
-					<qiun-data-charts type="pie" :opts="opts" :chartData="chartData" />
-				</view>
+		<view class="classify-list">
+			<view class="title">
+				<u-text text="本月分类支出排行" bold :size="18" :line-height="24"></u-text>
 			</view>
-			<view class="classify-list">
+			<view class="empty" v-if="classifyData.length===0">
+				<u-empty text="暂无数据"></u-empty>
+			</view>
+			<view class="content" v-else>
 				<view class="title">
-					<u-text text="分类支出排行" bold :size="18" :line-height="24"></u-text>
-				</view>
-				<view class="empty" v-if="classifyData.length===0">
-					<u-empty text="暂无数据"></u-empty>
-				</view>
-				<view class="content" v-else>
-					<view class="title">
-						<view class="classify">
-							<u-text text="类型" :size="18" :line-height="24"></u-text>
-						</view>
-						<view class="perenct">
-							<u-text text="占比" :size="18" :line-height="24"></u-text>
-						</view>
-						<view class="amount">
-							<u-text text="金额" :size="18" :line-height="24"></u-text>
-						</view>
+					<view class="classify">
+						<u-text text="类型" :size="18" :line-height="24"></u-text>
 					</view>
-					<view v-for="item in classifyData" :key="item.classify" class="row">
-						<view class="classify">
-							<u-text :text="item.classify" :size="16" :line-height="24"></u-text>
-						</view>
-						<view class="perenct">
-							<u-text :text="getPerenct(item.totalAmount)" :size="16" :line-height="24"></u-text>
-						</view>
-						<view class="amount">
-							<u-text :text="item.totalAmount" mode="price" type="error" :size="16"
-								:line-height="24"></u-text>
-						</view>
+					<view class="perenct">
+						<u-text text="占比" :size="18" :line-height="24"></u-text>
+					</view>
+					<view class="amount">
+						<u-text text="金额" :size="18" :line-height="24"></u-text>
+					</view>
+				</view>
+				<view v-for="item in classifyData" :key="item.classify" class="row">
+					<view class="classify">
+						<u-text :text="item.classify" :size="16" :line-height="24"></u-text>
+					</view>
+					<view class="perenct">
+						<u-text :text="getPerenct(item.totalAmount)" :size="16" :line-height="24"></u-text>
+					</view>
+					<view class="amount">
+						<u-text :text="item.totalAmount" mode="price" type="error" :size="16"
+							:line-height="24"></u-text>
 					</view>
 				</view>
 			</view>
-			<view class="classify-list">
-				<view class="title">
-					<u-text text="单项支出排行(前十)" bold :size="18" :line-height="24"></u-text>
-				</view>
-				<view class="empty" v-if="expendRecords.length===0">
-					<u-empty text="暂无数据"></u-empty>
-				</view>
-				<view class="content" v-else>
-					<view class="item" v-for="item in expendRecords" :key="item._id">
-						<view class="left">
-							<view class="classify">
-								<text class="text">{{item.classify}}</text>
-								<u-tag :text="item.tag" v-if="item.tag" plain size="mini" shape="circle"></u-tag>
-							</view>
-							<view class="remark" v-if="item.remark">{{item.remark}}</view>
-						</view>
-						<view class="right" :class="{'income':item.type==='income'}">
-							￥{{item.amount}}
-						</view>
-					</view>
-				</view>
+		</view>
+		<view class="classify-list">
+			<view class="title">月度小结</view>
+			<view class="summary">
+				<u-textarea v-model="monthData.summary"
+					placeholder="可以总结一下本月预算的达成情况,有没有超预算;收入情况如何,是否还是只依赖工资的单一收入源,都可以做个简单的总结" :height="160"
+					:maxlength="-1"></u-textarea>
 			</view>
-			<view class="classify-list">
-				<view class="title">
-					<u-text text="单项收入排行(前五)" bold :size="18" :line-height="24"></u-text>
-				</view>
-				<view class="empty" v-if="incomeRecords.length===0">
-					<u-empty text="暂无数据"></u-empty>
-				</view>
-				<view class="content" v-else>
-					<view class="item" v-for="item in incomeRecords" :key="item._id">
-						<view class="left">
-							<view class="classify">
-								<text class="text">{{item.classify}}</text>
-								<u-tag :text="item.tag" v-if="item.tag" plain size="mini" shape="circle"></u-tag>
-							</view>
-							<view class="remark" v-if="item.remark">{{item.remark}}</view>
-						</view>
-						<view class="right" :class="{'income':item.type==='income'}">
-							￥{{item.amount}}
-						</view>
-					</view>
-				</view>
-			</view>
-		</scroll-view>
+			<u-button type="primary" shape="circle" @click="save">保存</u-button>
+		</view>
 		<u-datetime-picker mode="year-month" :show="showDatePicker" v-model="date" :min-date="minDate"
 			:max-date="maxDate" @cancel="showDatePicker=false" @confirm="changeDate"
 			closeOnClickOverlay></u-datetime-picker>
-	</view>
+	</scroll-view>
 </template>
 
 <script setup>
@@ -143,11 +109,11 @@
 	const bookStore = useBookStore()
 	const bookId = computed(() => bookStore.bookId)
 	const today = dayjs();
-	const maxDate = today.valueOf();
+	const maxDate = today.subtract(1, 'month').valueOf();
 	const minDate = today.subtract(3, 'year').valueOf()
 	const showDatePicker = ref(false)
 	const year = ref(today.year())
-	const month = ref(today.month() + 1)
+	const month = ref(today.month())
 	const date = ref(maxDate)
 	const changeDate = () => {
 		const time = dayjs(date.value);
@@ -156,43 +122,24 @@
 		showDatePicker.value = false
 	}
 
-	const totalExpend = ref(0)
-	const totalIncome = ref(0)
+	const monthData = ref({})
+	const totalExpend = computed(() => {
+		return monthData.value?.totalExpend || 0
+	})
+	const totalIncome = computed(() => {
+		return monthData.value?.totalIncome || 0
+	})
 	const rest = computed(() => {
 		return totalIncome.value - totalExpend.value;
 	})
-
-	const classifyData = ref([])
-	const opts = {
-		color: ["#1890FF", "#91CB74", "#FAC858", "#EE6666", "#73C0DE", "#3CA272", "#FC8452", "#9A60B4", "#ea7ccc"],
-		padding: [5, 5, 5, 5],
-		enableScroll: false,
-		extra: {
-			pie: {
-				activeOpacity: 0.5,
-				activeRadius: 10,
-				offsetAngle: 0,
-				labelWidth: 15,
-				border: false,
-				borderWidth: 3,
-				borderColor: "#FFFFFF"
-			}
-		}
-	}
-	const chartData = computed(() => {
-		const data = {
-			series: [{
-				data: classifyData.value.map(v => ({
-					name: v.classify,
-					value: v.totalAmount
-				}))
-			}]
-		}
-		return data;
+	const percentage = computed(() => {
+		if (monthData.value.budget === 0) return 0;
+		return totalExpend.value / monthData.value.budget * 100
 	})
-
-	const expendRecords = ref([])
-	const incomeRecords = ref([])
+	const progress = computed(() => {
+		return percentage.value.toFixed(2) + '%'
+	})
+	const classifyData = ref([])
 
 	const getMonthData = async () => {
 		if (year.value && month.value && bookId.value) {
@@ -203,12 +150,10 @@
 			}).get();
 			const data = response?.result?.data?.[0];
 			if (data) {
-				totalExpend.value = data.totalExpend
-				totalIncome.value = data.totalIncome
+				monthData.value = data;
 			}
 		}
 	}
-
 	const getRecordData = async () => {
 		if (year.value && month.value) {
 			const date = `${year.value}-${month.value}`
@@ -233,50 +178,18 @@
 		if (!totalExpend.value) return '0%'
 		return (amount / totalExpend.value * 100).toFixed(2) + '%'
 	}
-
-	const getExpendRecord = async () => {
-		if (year.value && month.value) {
-			const date = `${year.value}-${month.value}`
-			const startDay = dayjs(date).startOf('M').valueOf()
-			const endDay = dayjs(date).endOf('M').valueOf()
-			const condition = {
-				type: "expend",
-				bookId: bookId.value,
-				datetime: dbCmd.gte(startDay).and(dbCmd.lte(endDay))
-			}
-			const response = await db.collection('account-item').where(condition).orderBy('amount', 'desc').limit(
-				10).get()
-			const data = response?.result?.data;
-			if (data.length > 0) {
-				console.log(data)
-				expendRecords.value = data
-			}
-		}
-	}
-	const getIncomeRecord = async () => {
-		if (year.value && month.value) {
-			const date = `${year.value}-${month.value}`
-			const startDay = dayjs(date).startOf('M').valueOf()
-			const endDay = dayjs(date).endOf('M').valueOf()
-			const condition = {
-				type: "income",
-				bookId: bookId.value,
-				datetime: dbCmd.gte(startDay).and(dbCmd.lte(endDay))
-			}
-			const response = await db.collection('account-item').where(condition).orderBy('amount', 'desc').limit(
-				5).get()
-			const data = response?.result?.data;
-			if (data.length > 0) {
-				incomeRecords.value = data
-			}
-		}
-	}
-
 	const init = () => {
 		getMonthData();
 		getRecordData();
-		getExpendRecord();
-		getIncomeRecord();
+	}
+
+	const save = async () => {
+		const id = monthData.value?._id;
+		if (id) {
+			await db.collection("account-month").doc(id).update({
+				summary: monthData.value.summary
+			})
+		}
 	}
 
 	watchEffect(() => {
@@ -290,6 +203,8 @@
 <style lang="scss" scoped>
 	.container {
 		width: 100%;
+		min-height: 100%;
+		height: fit-content;
 		display: flex;
 		flex-direction: column;
 		padding: 32rpx;
@@ -361,7 +276,6 @@
 
 		}
 
-		.classify-chart,
 		.classify-list {
 			height: fit-content;
 			background-color: #fff;
@@ -405,6 +319,10 @@
 				display: flex;
 				align-items: center;
 				justify-content: center;
+			}
+
+			.summary {
+				margin: 24rpx 0;
 			}
 
 			.item {
@@ -455,5 +373,6 @@
 			}
 
 		}
+
 	}
 </style>

@@ -60,6 +60,42 @@ async function getRecordList(params) {
 	}
 }
 
+async function getRecordListByClassify(params) {
+	const {
+		type,
+		bookId,
+		classify,
+		startDay,
+		endDay
+	} = params
+	if (!bookId) {
+		return {
+			errCode: 10001,
+			errMsg: "参数错误: 缺少必要的参数"
+		}
+	}
+	const condition = {
+		bookId
+	}
+	if (startDay && endDay) {
+		condition.datetime = dbCmd.gte(startDay).and(dbCmd.lte(endDay))
+	}
+	if (startDay && !endDay) {
+		condition.datetime = dbCmd.gte(startDay)
+	}
+	if (!startDay && endDay) {
+		condition.datetime = dbCmd.lte(endDay)
+	}
+	if (type) {
+		condition.type = type
+	}
+	const response = await accountCollection.where(condition).groupBy("classify").get()
+	return {
+		errCode: 0,
+		errMsg: "查询成功",
+		data: response.data
+	}
+}
 async function getRecordById(id) {
 	if (!id) {
 		return {

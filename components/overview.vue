@@ -10,13 +10,13 @@
 				</view>
 			</view>
 			<view class="expend">
-				<view class="label">支出</view>
+				<view class="label">本月支出</view>
 				<view class="value">
 					<u-text mode="price" type="error" bold :size="16" :text="totalExpend"></u-text>
 				</view>
 			</view>
 			<view class="income">
-				<view class="label">收入</view>
+				<view class="label">本月收入</view>
 				<view class="value">
 					<u-text mode="price" type="success" bold :size="16" :text="totalIncome"></u-text>
 				</view>

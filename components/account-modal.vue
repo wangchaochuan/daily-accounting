@@ -29,8 +29,8 @@
 				</u-form-item>
 			</u-form>
 			<view class="footer">
-				<u-button class="cancel" type="error" shape="circle" :hairline="false" @click="cancel">取消</u-button>
-				<u-button class="confirm" type="primary" shape="circle" :hairline="false" @click="confirm">确定</u-button>
+				<u-button class="cancel" type="error" shape="circle"  @click="cancel">取消</u-button>
+				<u-button class="confirm" type="primary" shape="circle"  @click="confirm">确定</u-button>
 			</view>
 			<u-datetime-picker mode="date" :show="showDatePicker" v-model="model.date" :min-date="minDate"
 				:max-date="today" @cancel="closePicker" @close="closePicker" @confirm="closePicker"></u-datetime-picker>

@@ -101,6 +101,7 @@
 <style lang="scss">
 	/*每个页面公共css */
 	@import url('./static/font/iconfont.css');
+	@import '@/uni_modules/uview-plus/index.scss';
 
 	uni-page-body {
 		height: 100%;
