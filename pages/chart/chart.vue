@@ -76,6 +76,39 @@
 			</view>
 			<view class="classify-list">
 				<view class="title">
+					<u-text text="标签支出排行" bold :size="18" :line-height="24"></u-text>
+				</view>
+				<view class="empty" v-if="tagsData.length===0">
+					<u-empty text="暂无数据"></u-empty>
+				</view>
+				<view class="content" v-else>
+					<view class="title">
+						<view class="classify">
+							<u-text text="类型" :size="18" :line-height="24"></u-text>
+						</view>
+						<view class="perenct">
+							<u-text text="占比" :size="18" :line-height="24"></u-text>
+						</view>
+						<view class="amount">
+							<u-text text="金额" :size="18" :line-height="24"></u-text>
+						</view>
+					</view>
+					<view v-for="item in tagsData" :key="item.tag" class="row">
+						<view class="classify">
+							<u-text :text="item.tag" :size="16" :line-height="24"></u-text>
+						</view>
+						<view class="perenct">
+							<u-text :text="getPerenct(item.totalAmount)" :size="16" :line-height="24"></u-text>
+						</view>
+						<view class="amount">
+							<u-text :text="item.totalAmount" mode="price" type="error" :size="16"
+								:line-height="24"></u-text>
+						</view>
+					</view>
+				</view>
+			</view>
+			<view class="classify-list">
+				<view class="title">
 					<u-text text="单项支出排行(前十)" bold :size="18" :line-height="24"></u-text>
 				</view>
 				<view class="empty" v-if="expendRecords.length===0">
@@ -195,6 +228,8 @@
 		return data;
 	})
 
+	const tagsData = ref([])
+
 	const expendRecords = ref([])
 	const incomeRecords = ref([])
 
@@ -224,10 +259,9 @@
 				datetime: dbCmd.gte(startDay).and(dbCmd.lte(endDay))
 			}
 			const response = await db.collection('account-item').where(condition).groupBy('classify').groupField(
-				'sum(amount) as totalAmount').get();
+				'sum(amount) as totalAmount').orderBy('totalAmount', 'desc').get();
 			const data = response?.result?.data;
 			if (data.length > 0) {
-				data.sort((a, b) => b.totalAmount - a.totalAmount)
 				classifyData.value = data
 			}
 		}
@@ -252,7 +286,6 @@
 				10).get()
 			const data = response?.result?.data;
 			if (data.length > 0) {
-				console.log(data)
 				expendRecords.value = data
 			}
 		}
@@ -275,12 +308,31 @@
 			}
 		}
 	}
+	const getTagRecord = async () => {
+		if (year.value && month.value) {
+			const date = `${year.value}-${month.value}`
+			const startDay = dayjs(date).startOf('M').valueOf()
+			const endDay = dayjs(date).endOf('M').valueOf()
+			const condition = {
+				type: "expend",
+				bookId: bookId.value,
+				datetime: dbCmd.gte(startDay).and(dbCmd.lte(endDay))
+			}
+			const response = await db.collection('account-item').where(condition).groupBy('tag').groupField(
+				'sum(amount) as totalAmount').orderBy('totalAmount', 'desc').get();
+			const data = (response?.result?.data || []).filter(v => v.tag)
+			if (data.length > 0) {
+				tagsData.value = data;
+			}
+		}
+	}
 
 	const init = () => {
 		getMonthData();
 		getRecordData();
 		getExpendRecord();
 		getIncomeRecord();
+		getTagRecord();
 	}
 
 	watchEffect(() => {
