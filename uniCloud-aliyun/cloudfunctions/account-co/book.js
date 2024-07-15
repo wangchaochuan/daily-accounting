@@ -15,8 +15,11 @@ async function getBooks(userId) {
 			errMsg: "参数错误: 缺少必要的参数userId"
 		}
 	}
-	// 联表查询
-	const response = await bookCollection.aggregate()
+	const response = await bookCollection
+		.aggregate()
+		.match({
+			members: dbCmd.elemMatch(dbCmd.eq(userId))
+		})
 		.lookup({
 			from: "account-user",
 			let: {
@@ -62,7 +65,9 @@ async function createBook(name, userId, type = "private") {
 		type,
 		name,
 		creator: userId,
-		members: [userId]
+		members: [userId],
+		expendClassify: ["餐饮", "买菜", "水果", "宝宝", "网购", "交通", "居家", "医疗", "零食", "房贷", "房租", "其他"],
+		incomeClassify: ["工资", "奖金", "理财", "兼职", "人情", "转账", "红包", "其他"]
 	})
 	return {
 		errCode: 0,
@@ -113,9 +118,27 @@ async function updateBook(id, book) {
 	}
 }
 
+async function addBookMembers(id, user) {
+	if (!id) {
+		return {
+			errCode: 10001,
+			errMsg: "参数错误: 缺少必要的参数"
+		}
+	}
+	const response = await bookCollection.doc(id).update({
+		members: dbCmd.push(user)
+	})
+	return {
+		errCode: 0,
+		errMsg: "更新成功",
+		data: response
+	}
+}
+
 module.exports = {
 	getBooks,
 	createBook,
 	updateBook,
-	deleteBook
+	deleteBook,
+	addBookMembers
 }

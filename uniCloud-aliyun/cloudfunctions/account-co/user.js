@@ -102,6 +102,9 @@ async function registerUser(code) {
 			name: "默认账本",
 			type: "private",
 			creator: id,
+			members: [id],
+			expendClassify: ["餐饮", "买菜", "水果", "宝宝", "网购", "交通", "居家", "医疗", "零食", "房贷", "房租", "其他"],
+			incomeClassify: ["工资", "奖金", "理财", "兼职", "人情", "转账", "红包", "其他"]
 		})
 		return {
 			errCode: 0,

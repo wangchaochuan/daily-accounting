@@ -50,7 +50,7 @@
 	const userStore = useUserStore()
 	const visible = ref(false)
 	const user = computed(() => userStore.user)
-	const defaultAvatar = "https://uview-plus.jiangruyi.com/h5/static/uview/album/noExist.jpg";
+	const defaultAvatarUrl = "https://uview-plus.jiangruyi.com/h5/static/uview/album/noExist.jpg";
 	const src = computed(() => {
 		if (user.value?.avatar?.url) {
 			return user.value?.avatar?.url

@@ -18,8 +18,11 @@
 					<view class="edit" v-if="book.creator===userId">
 						<u-button @click="editBook(book)">编辑</u-button>
 					</view>
+					<view class="edit" v-else>
+						<u-button @click="quitBook(book)">退出</u-button>
+					</view>
 					<view class="invite" v-if="book.type==='public'">
-						<u-button @click="inviteMember(book)">邀请成员</u-button>
+						<u-button open-type="share" :dataName="book">邀请成员</u-button>
 					</view>
 					<view class="set" v-show="book._id!==activeBook">
 						<u-button @click="setBook(book._id)">设为默认账本</u-button>
@@ -42,9 +45,11 @@
 	import {
 		ref,
 		computed,
+		onMounted
 	} from 'vue';
 	import {
-		onLoad
+		onLoad,
+		onShareAppMessage
 	} from '@dcloudio/uni-app';
 	import BookModal from '@/components/book-modal.vue';
 	import useUserStore from '@/store/user.js';
@@ -66,10 +71,11 @@
 		}
 	});
 	const userId = computed(() => userStore.user._id)
+	const userName = computed(() => userStore.user.nick_name)
 	const bookId = ref("");
-
+	const defaultAvatarUrl = "https://uview-plus.jiangruyi.com/h5/static/uview/album/noExist.jpg";
 	const getUrls = (book) => {
-		return book.members.map(v => v.url)
+		return book.members.map(v => v?.url || defaultAvatarUrl)
 	}
 
 	const showModal = ref(false)
@@ -98,8 +104,18 @@
 		mode.value = 'create';
 		showBookModal.value = true;
 	}
-	const inviteMember = (book) => {
-		console.log(book)
+	const quitBook = async (book) => {
+		const id = book._id;
+		const members = book.members;
+		const index = members.findIndex(v => v.id === userId.value)
+		if (index > -1) {
+			members.splice(index, 1);
+			await CO.updateBook(id, {
+				members
+			})
+			loadBooks(userId.value)
+		}
+
 	}
 	const deleteBook = async () => {
 		await CO.deleteBook(bookId.value)
@@ -116,7 +132,11 @@
 			books.value = response.data.map(v => {
 				return {
 					...v,
-					members: v.members.map(m => m?.avatar?.url)
+					members: v.members.map(m => ({
+						id: m._id,
+						name: m.nick_name,
+						url: m.avatar?.url
+					}))
 				}
 			})
 		}
@@ -125,6 +145,29 @@
 	const handleSuccess = () => {
 		loadBooks(userId.value)
 	}
+	onMounted(() => {
+		loadBooks(userId.value)
+	})
+	uni.showShareMenu({
+		withShareTicket: true
+	})
+	onShareAppMessage((params) => {
+		if (params.from === 'button') {
+			const data = params.target.dataset.name;
+			const bookName = data.name;
+			const bookId = data._id;
+			const members = JSON.stringify(data.members.map(v => v._id));
+			return {
+				title: `${userName.value}邀请您使用青牛记账，并加入共享账本:${bookName}`,
+				path: `/pages/invite/invite?userName=${userName.value}&bookName=${bookName}&bookId=${bookId}&members=${members}`
+			}
+		} else {
+			return {
+				title: `${userName.value}邀请您使用青牛记账`,
+				path: `/pages/home/home`
+			}
+		}
+	})
 </script>
 
 <style lang="scss" scoped>

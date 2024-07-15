@@ -23,6 +23,10 @@
 					<view class="left"><text class="text">账本管理</text></view>
 					<view class="right"><u-icon name="arrow-right" size="24" color="#555"></u-icon></view>
 				</view>
+				<view class="item" @click="jumpToClassify">
+					<view class="left"><text class="text">分类管理</text></view>
+					<view class="right"><u-icon name="arrow-right" size="24" color="#555"></u-icon></view>
+				</view>
 				<view class="item" @click="jumpToMonth">
 					<view class="left"><text class="text">月度总结</text></view>
 					<view class="right"><u-icon name="arrow-right" size="24" color="#555"></u-icon></view>
@@ -69,16 +73,19 @@
 	}
 
 	const jumpToUser = () => {
-		navigate('/sub-pages/user-detail/user-detail')
+		navigate('/pages/user-detail/user-detail')
 	}
 	const jumpToBook = () => {
-		navigate(`/sub-pages/book/book?userId=${user.value._id}`)
+		navigate(`/pages/book/book?userId=${user.value._id}`)
+	}
+	const jumpToClassify = () => {
+		navigate(`/pages/classify/classify`)
 	}
 	const jumpToMonth = () => {
-		navigate('/sub-pages/month-summary/month-summary')
+		navigate('/pages/month-summary/month-summary')
 	}
 	const jumpToAbout = () => {
-		navigate('/sub-pages/about/about')
+		navigate('/pages/about/about')
 	}
 </script>
 

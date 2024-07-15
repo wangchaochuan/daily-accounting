@@ -1,6 +1,5 @@
 {
-	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-		{
+	"pages": [{
 			"path": "pages/home/home",
 			"style": {
 				"navigationBarTitleText": "记账本",
@@ -24,7 +23,6 @@
 				"navigationBarBackgroundColor": "#2979ff"
 			}
 		},
-
 		{
 			"path": "pages/record-detail/record-detail",
 			"style": {
@@ -32,51 +30,60 @@
 				"navigationBarTextStyle": "white",
 				"navigationBarBackgroundColor": "#2979ff"
 			}
+		},
+		{
+			"path": "pages/invite/invite",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/user-detail/user-detail",
+			"style": {
+				"navigationBarTitleText": "个人信息",
+				"navigationBarTextStyle": "white",
+				"navigationBarBackgroundColor": "#2979ff"
+			}
+		},
+		{
+			"path": "pages/book/book",
+			"style": {
+				"navigationBarTitleText": "账本管理",
+				"navigationBarTextStyle": "white",
+				"navigationBarBackgroundColor": "#2979ff"
+			}
+		},
+		{
+			"path": "pages/about/about",
+			"style": {
+				"navigationBarTitleText": "关于我们",
+				"navigationBarTextStyle": "white",
+				"navigationBarBackgroundColor": "#2979ff"
+			}
+		},
+		{
+			"path": "pages/month-summary/month-summary",
+			"style": {
+				"navigationBarTitleText": "月度总结",
+				"navigationBarTextStyle": "white",
+				"navigationBarBackgroundColor": "#2979ff"
+			}
+		},
+		{
+			"path" : "pages/classify/classify",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
 		}
 	],
-	"subPackages": [{
-		"root": "sub-pages",
-		"pages": [{
-				"path": "user-detail/user-detail",
-				"style": {
-					"navigationBarTitleText": "个人信息",
-					"navigationBarTextStyle": "white",
-					"navigationBarBackgroundColor": "#2979ff"
-				}
-			},
-			{
-				"path": "book/book",
-				"style": {
-					"navigationBarTitleText": "账本管理",
-					"navigationBarTextStyle": "white",
-					"navigationBarBackgroundColor": "#2979ff"
-				}
-			},
-			{
-				"path": "about/about",
-				"style": {
-					"navigationBarTitleText": "关于我们",
-					"navigationBarTextStyle": "white",
-					"navigationBarBackgroundColor": "#2979ff"
-				}
-			},
-			{
-				"path": "month-summary/month-summary",
-				"style": {
-					"navigationBarTitleText": "月度总结",
-					"navigationBarTextStyle": "white",
-					"navigationBarBackgroundColor": "#2979ff"
-				}
-			}
-		]
-	}],
+	"subPackages": [],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
 	},
-	"uniIdRouter": {},
 	"tabBar": {
 		"color": "#BFBFBF",
 		"selectedColor": "#4C5CDB",

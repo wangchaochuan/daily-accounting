@@ -10,6 +10,7 @@ const {
 	createBook,
 	deleteBook,
 	updateBook,
+	addBookMembers
 } = require("./book.js")
 const {
 	getMonthData,
@@ -71,6 +72,7 @@ module.exports = {
 	createBook,
 	deleteBook,
 	updateBook,
+	addBookMembers,
 	// 月份相关接口
 	getMonthData,
 	updateMonthBudget,
