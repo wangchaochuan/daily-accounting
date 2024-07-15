@@ -211,6 +211,27 @@
 		box-sizing: border-box;
 		background-color: $u-info-light;
 
+		.budget {
+			height: fit-content;
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			justify-content: center;
+			padding: 0 32rpx;
+
+			.origin,
+			.rest {
+				display: flex;
+
+				.label {
+					font-size: 28rpx;
+					color: $u-content-color;
+					margin-right: 8rpx;
+				}
+
+			}
+		}
+
 		.overview {
 			height: fit-content;
 			background-color: #fff;
@@ -274,6 +295,35 @@
 				}
 			}
 
+		}
+
+		.progress {
+			margin-top: 8rpx;
+			padding: 0 32rpx;
+
+			.text {
+				font-size: 28rpx;
+				color: $u-content-color;
+				margin-bottom: 4rpx;
+
+				.value {
+					color: $u-primary;
+					margin-left: 8rpx;
+				}
+			}
+		}
+
+		.surplus {
+			display: flex;
+			margin-top: 16rpx;
+			margin-right: 8rpx;
+			padding: 0 32rpx;
+
+			.label {
+				font-size: 28rpx;
+				color: $u-content-color;
+				margin-right: 8rpx;
+			}
 		}
 
 		.classify-list {
