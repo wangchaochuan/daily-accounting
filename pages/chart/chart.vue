@@ -133,15 +133,19 @@
 		watchEffect
 	} from 'vue'
 	import {
-		onShow
+		onShow,
+		onShareAppMessage
 	} from '@dcloudio/uni-app'
 	import dayjs from 'dayjs'
 	import useBookStore from '@/store/book.js';
+	import useUserStore from '@/store/user.js';
 
 	const db = uniCloud.database()
 	const dbCmd = db.command
 	const bookStore = useBookStore()
 	const bookId = computed(() => bookStore.bookId)
+	const userStore = useUserStore()
+	const userName = computed(() => userStore.user.nick_name)
 	const today = dayjs();
 	const maxDate = today.valueOf();
 	const minDate = today.subtract(3, 'year').valueOf()
@@ -284,6 +288,12 @@
 	})
 	onShow(() => {
 		init()
+	})
+	onShareAppMessage((params) => {
+		return {
+			title: `${userName.value}邀请您使用青牛记账`,
+			path: `/pages/home/home`
+		}
 	})
 </script>
 

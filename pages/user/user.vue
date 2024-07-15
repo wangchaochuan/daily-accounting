@@ -50,7 +50,8 @@
 		computed,
 	} from 'vue'
 	import {
-		onShow
+		onShow,
+		onShareAppMessage
 	} from '@dcloudio/uni-app'
 	import useUserStore from '@/store/user.js';
 
@@ -87,6 +88,12 @@
 	const jumpToAbout = () => {
 		navigate('/pages/about/about')
 	}
+	onShareAppMessage((params) => {
+		return {
+			title: `${user.value.nick_name}邀请您使用青牛记账`,
+			path: `/pages/home/home`
+		}
+	})
 </script>
 
 <style lang="scss" scoped>

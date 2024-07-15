@@ -22,17 +22,21 @@
 		watchEffect
 	} from 'vue'
 	import {
-		onShow
+		onShow,
+		onShareAppMessage
 	} from '@dcloudio/uni-app'
 	import AccountModal from '@/components/account-modal.vue'
 	import NavbarHome from '@/components/navbar_home.vue';
 	import Overview from '@/components/overview.vue';
 	import DateCard from "@/components/date-card.vue";
 	import useBookStore from '@/store/book.js';
+	import useUserStore from '@/store/user.js';
 
 
 	const CO = uniCloud.importObject("account-co");
+	const userStore = useUserStore()
 	const bookStore = useBookStore()
+	const userName = computed(() => userStore.user.nick_name)
 	const bookId = computed(() => bookStore.bookId)
 	const startDay = computed(() => bookStore.startDay)
 	const endDay = computed(() => bookStore.endDay)
@@ -67,6 +71,12 @@
 	})
 	onShow(() => {
 		init()
+	})
+	onShareAppMessage((params) => {
+		return {
+			title: `${userName.value}邀请您使用青牛记账`,
+			path: `/pages/home/home`
+		}
 	})
 </script>
 
