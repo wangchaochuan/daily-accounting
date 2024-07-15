@@ -70,28 +70,24 @@
 		} else {
 			userStore.setUser(user);
 		}
-		const books = uni.getStorageSync("books");
+
 		let currentBookId = uni.getStorageSync("currentBookId");
-		if (!books) {
-			const response = await CO.getBooks(userId)
-			if (Array.isArray(response.data)) {
-				const list = response.data.map(v => {
-					return {
-						...v,
-						members: v.members.map(m => ({
-							id: m._id,
-							name: m.nick_name,
-							url: m.avatar?.url
-						}))
-					}
-				})
-				bookStore.setBooks(list);
-				if (!currentBookId) {
-					currentBookId = list?.[0]?._id;
+		const response = await CO.getBooks(userId)
+		if (Array.isArray(response.data)) {
+			const list = response.data.map(v => {
+				return {
+					...v,
+					members: v.members.map(m => ({
+						id: m._id,
+						name: m.nick_name,
+						url: m.avatar?.url
+					}))
 				}
+			})
+			bookStore.setBooks(list);
+			if (!currentBookId) {
+				currentBookId = list?.[0]?._id;
 			}
-		} else {
-			bookStore.setBooks(books);
 		}
 		bookStore.setBookId(currentBookId)
 		// #endif
