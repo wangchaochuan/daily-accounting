@@ -49,30 +49,21 @@
 
 	onLaunch(async () => {
 		// #ifdef MP-WEIXIN
-		const user = uni.getStorageSync("user");
-		let userId = user?._id;
-		// 缓存中已经有用户信息了,就不再需要从接口读取
-		if (!userId) {
-			const {
-				code
-			} = await uni.login({
-				provider: "weixin"
-			});
-			if (!code) {
-				return;
-			}
-			// 注册用户并返回注册的用户信息,如果已经注册过了不会重复注册
-			const {
-				data
-			} = await CO.registerUser(code)
-			userStore.setUser(data.user);
-			userId = data.user._id;
-		} else {
-			userStore.setUser(user);
+		const {
+			code
+		} = await uni.login({
+			provider: "weixin"
+		});
+		if (!code) {
+			return;
 		}
-
+		// 注册用户并返回注册的用户信息,如果已经注册过了不会重复注册
+		const {
+			data
+		} = await CO.registerUser(code)
+		userStore.setUser(data.user);
 		let currentBookId = uni.getStorageSync("currentBookId");
-		const response = await CO.getBooks(userId)
+		const response = await CO.getBooks(data.user._id)
 		if (Array.isArray(response.data)) {
 			const list = response.data.map(v => {
 				return {

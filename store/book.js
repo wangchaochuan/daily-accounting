@@ -26,7 +26,6 @@ const useBookStore = defineStore('book', () => {
 
 	function setBooks(value) {
 		books.value = value;
-		uni.setStorageSync('books', value)
 	}
 
 	function setBookId(id) {

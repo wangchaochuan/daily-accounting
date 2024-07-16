@@ -10,15 +10,25 @@
 					</view>
 				</view>
 				<view class="expend">
-					<view class="label">本月支出</view>
+					<view class="label">
+						<text style="margin-right: 4px;">本月支出</text>
+						<u-icon :name="showExpend?'eye-off':'eye-fill'" :size="16"
+							@click="showExpend=!showExpend"></u-icon>
+					</view>
 					<view class="value">
-						<u-text mode="price" type="error" bold :size="16" :text="totalExpend"></u-text>
+						<u-text :mode="showExpend? 'price':'text'" type="success" bold :size="16"
+							:text="showExpend?totalExpend:'****'"></u-text>
 					</view>
 				</view>
 				<view class="income">
-					<view class="label">本月收入</view>
+					<view class="label">
+						<text style="margin-right: 4px;">本月收入</text>
+						<u-icon :name="showIncome?'eye-off':'eye-fill'" :size="16"
+							@click="showIncome=!showIncome"></u-icon>
+					</view>
 					<view class="value">
-						<u-text mode="price" type="success" bold :size="16" :text="totalIncome"></u-text>
+						<u-text :mode="showIncome? 'price':'text'" type="success" bold :size="16"
+							:text="showIncome?totalIncome:'****'"></u-text>
 					</view>
 				</view>
 			</view>
@@ -39,7 +49,8 @@
 			<view class="surplus">
 				<view class="label">本月结余:</view>
 				<view class="value">
-					<u-text mode="price" type="primary" bold :size="16" :text="rest"></u-text>
+					<u-text :mode="showRest?'price':'text'" type="primary" bold :size="16"
+						:text="showRest?rest:'****'"></u-text>
 				</view>
 			</view>
 		</view>
@@ -123,6 +134,9 @@
 	}
 
 	const monthData = ref({})
+	const showIncome = ref(false)
+	const showExpend = ref(true)
+	const showRest = computed(() => showIncome.value && showExpend.value)
 	const totalExpend = computed(() => {
 		return monthData.value?.totalExpend || 0
 	})
@@ -188,6 +202,9 @@
 		if (id) {
 			await db.collection("account-month").doc(id).update({
 				summary: monthData.value.summary
+			})
+			uni.showToast({
+				title: "保存成功"
 			})
 		}
 	}
@@ -274,6 +291,7 @@
 					padding-top: 32rpx;
 
 					.label {
+						display: flex;
 						font-size: 28rpx;
 						color: $u-content-color;
 					}

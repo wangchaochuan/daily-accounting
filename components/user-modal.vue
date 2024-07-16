@@ -12,6 +12,7 @@
 			<view class="footer">
 				<u-button type="primary" shape="circle" :loading="loading" @click="save">保存</u-button>
 			</view>
+			<ksp-cropper mode="fixed" :width="200" :height="200" :url="url" @cancel="oncancel" @ok="onok"></ksp-cropper>
 		</view>
 	</u-popup>
 </template>
@@ -43,6 +44,15 @@
 	const src = computed(() => {
 		return avatar.value?.url ? avatar.value.url : defaultUrl
 	})
+	// 头像裁剪
+	const url = ref("")
+	const oncancel = () => {
+		url.value = ""
+	}
+	const onok = (e) => {
+		url.value = ""
+		avatar.value.url = e.path;
+	}
 
 	const rules = {
 		nick_name: [{
@@ -94,6 +104,7 @@
 				});
 				avatar_file.url = fileID
 				avatar.value = avatar_file;
+				url.value = avatar_file.url;
 				uni.hideLoading()
 			}
 		})
