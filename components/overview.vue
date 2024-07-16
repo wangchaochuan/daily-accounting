@@ -110,10 +110,10 @@
 	})
 	const percentage = computed(() => {
 		if (budget.value === 0) return 0;
-		return totalExpend.value / budget.value * 100
+		return (totalExpend.value / budget.value * 100).toFixed(2)
 	})
 	const progress = computed(() => {
-		return percentage.value.toFixed(2) + '%'
+		return percentage.value + '%'
 	})
 	const rest = computed(() => {
 		return totalIncome.value - totalExpend.value;

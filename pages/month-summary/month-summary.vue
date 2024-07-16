@@ -146,12 +146,13 @@
 	const rest = computed(() => {
 		return totalIncome.value - totalExpend.value;
 	})
+
 	const percentage = computed(() => {
 		if (monthData.value.budget === 0) return 0;
-		return totalExpend.value / monthData.value.budget * 100
+		return (totalExpend.value / monthData.value.budget * 100).toFixed(2)
 	})
 	const progress = computed(() => {
-		return percentage.value.toFixed(2) + '%'
+		return percentage.value + '%'
 	})
 	const classifyData = ref([])
 
