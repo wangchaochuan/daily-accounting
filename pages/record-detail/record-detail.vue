@@ -38,7 +38,7 @@
         <view class="value">
           <u-text
             mode="date"
-            :text="data.updateTimee"
+            :text="data.updateTime"
             line-height="38px"
           ></u-text>
         </view>
