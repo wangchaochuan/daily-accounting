@@ -30,11 +30,25 @@
         <view class="value">{{ data.remark }}</view>
       </view>
       <view class="item">
-        <view class="label">记录人:</view>
-        <view class="value">{{ getUpdater(data.updater) }}</view>
+        <view class="label">创建人:</view>
+        <view class="value">{{ getUpdater(data.creator) }}</view>
       </view>
       <view class="item">
-        <view class="label">记录日期:</view>
+        <view class="label">创建日期:</view>
+        <view class="value">
+          <u-text
+            mode="date"
+            :text="data.createTime"
+            line-height="38px"
+          ></u-text>
+        </view>
+      </view>
+      <view class="item" v-if="data.createTime !== data.updateTime">
+        <view class="label">修改人:</view>
+        <view class="value">{{ getUpdater(data.updater) }}</view>
+      </view>
+      <view class="item" v-if="data.createTime !== data.updateTime">
+        <view class="label">修改日期:</view>
         <view class="value">
           <u-text
             mode="date"
