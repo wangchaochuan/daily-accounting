@@ -35,11 +35,15 @@
 	import {
 		onShow
 	} from '@dcloudio/uni-app'
+	import useUserStore from '@/store/user.js';
 	import useBookStore from '@/store/book.js';
 
 	const db = uniCloud.database()
+	const CO = uniCloud.importObject("account-co");
+	const userStore = useUserStore()
 	const bookStore = useBookStore()
 	const bookId = computed(() => bookStore.bookId)
+	const userId = computed(() => userStore.user._id)
 	const dragRef = ref(null)
 	const type = ref('expend')
 	const showModal = ref(false)
@@ -82,6 +86,20 @@
 				condition.incomeClassify = newList.value
 			}
 			await db.collection("account-book").doc(bookId.value).update(condition);
+			const response = await CO.getBooks(userId.value)
+			if (Array.isArray(response.data)) {
+				const list = response.data.map(v => {
+					return {
+						...v,
+						members: v.members.map(m => ({
+							id: m._id,
+							name: m.nick_name,
+							url: m.avatar?.url
+						}))
+					}
+				})
+				bookStore.setBooks(list);
+			}
 			uni.switchTab({
 				url: "/pages/user/user"
 			})

@@ -196,7 +196,7 @@ const confirm = async () => {
   } else {
     const data = {
       ...params,
-      datetime: dayjs().valueOf(),
+      datetime: dayjs(model.date).valueOf(),
       updater: userId.value,
       updateTime: dayjs().format("YYYY-MM-DD HH:mm"),
     };

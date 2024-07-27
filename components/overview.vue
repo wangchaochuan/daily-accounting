@@ -9,24 +9,39 @@
 					<u-icon name="arrow-down-fill" class="icon"></u-icon>
 				</view>
 			</view>
-			<view class="expend">
-				<view class="label">
-					<text style="margin-right: 4px;">本月支出</text>
-					<u-icon :name="showExpend?'eye-off':'eye-fill'" :size="16" @click="showExpend=!showExpend"></u-icon>
+			<view class="right">
+				<view class="expend">
+					<view class="label">
+						<text style="margin-right: 4px;">本月支出</text>
+						<u-icon :name="showExpend?'eye-off':'eye-fill'" :size="16"
+							@click="showExpend=!showExpend"></u-icon>
+					</view>
+					<view class="value">
+						<u-text :mode="showExpend? 'price':'text'" type="success" bold :size="16"
+							:text="showExpend?totalExpend:'****'"></u-text>
+					</view>
 				</view>
-				<view class="value">
-					<u-text :mode="showExpend? 'price':'text'" type="success" bold :size="16"
-						:text="showExpend?totalExpend:'****'"></u-text>
+				<view class="income">
+					<view class="label">
+						<text style="margin-right: 4px;">本月收入</text>
+						<u-icon :name="showIncome?'eye-off':'eye-fill'" :size="16"
+							@click="showIncome=!showIncome"></u-icon>
+					</view>
+					<view class="value">
+						<u-text :mode="showIncome? 'price':'text'" type="success" bold :size="16"
+							:text="showIncome?totalIncome:'****'"></u-text>
+					</view>
 				</view>
-			</view>
-			<view class="income">
-				<view class="label">
-					<text style="margin-right: 4px;">本月收入</text>
-					<u-icon :name="showIncome?'eye-off':'eye-fill'" :size="16" @click="showIncome=!showIncome"></u-icon>
-				</view>
-				<view class="value">
-					<u-text :mode="showIncome? 'price':'text'" type="success" bold :size="16"
-						:text="showIncome?totalIncome:'****'"></u-text>
+				<view class="expend" v-if="memberCount>1">
+					<view class="label">
+						<text style="margin-right: 4px;">本月人均支出</text>
+						<u-icon :name="showExpend?'eye-off':'eye-fill'" :size="16"
+							@click="showExpend=!showExpend"></u-icon>
+					</view>
+					<view class="value">
+						<u-text :mode="showExpend? 'price':'text'" type="success" bold :size="16"
+							:text="showExpend?averExpend:'****'"></u-text>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -82,6 +97,8 @@
 	const CO = uniCloud.importObject("account-co");
 	const bookStore = useBookStore()
 	const bookId = computed(() => bookStore.bookId)
+	const memberCount = computed(() => bookStore.currentBook.members?.length || 1)
+	console.log(memberCount, 'member')
 	const today = dayjs();
 	const maxDate = today.valueOf();
 	const minDate = today.subtract(3, 'year').valueOf()
@@ -117,6 +134,9 @@
 	})
 	const rest = computed(() => {
 		return totalIncome.value - totalExpend.value;
+	})
+	const averExpend = computed(() => {
+		return (totalExpend.value / memberCount.value).toFixed(2)
 	})
 	const changeBudget = async () => {
 		if (new_budget.value >= 0) {
@@ -185,7 +205,8 @@
 		}
 
 		.header {
-			height: 120rpx;
+			height: fit-content;
+			min-height: 120rpx;
 			position: relative;
 			display: flex;
 			background-color: #fff;
@@ -212,17 +233,24 @@
 				}
 			}
 
-			.expend,
-			.income {
-				flex: 1;
-				padding-top: 32rpx;
+			.right {
+				flex: 2;
+				display: flex;
+				flex-wrap: wrap;
 
-				.label {
-					display: flex;
-					font-size: 28rpx;
-					color: $u-content-color;
+				.expend,
+				.income {
+					width: 50%;
+					padding-top: 32rpx;
+
+					.label {
+						display: flex;
+						font-size: 28rpx;
+						color: $u-content-color;
+					}
 				}
 			}
+
 
 
 		}
