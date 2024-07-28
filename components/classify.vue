@@ -30,18 +30,22 @@
 
 <style lang="scss">
 	.classify-list {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(120rpx, 1fr));
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: flex-start;
 		gap: 16rpx;
 
 		.classify-item {
-			width: 120rpx;
+			width: fit-content;
+			min-width: 120rpx;
 			height: 64rpx;
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			border-radius: 16rpx;
 			background-color: $u-info-disabled;
+			padding: 0 16rpx;
+			box-sizing: border-box;
 
 			&.active {
 				background-color: $u-primary;

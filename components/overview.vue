@@ -97,7 +97,7 @@
 	const CO = uniCloud.importObject("account-co");
 	const bookStore = useBookStore()
 	const bookId = computed(() => bookStore.bookId)
-	const memberCount = computed(() => bookStore.currentBook.members?.length || 1)
+	const memberCount = computed(() => bookStore.currentBook?.members?.length || 1)
 	console.log(memberCount, 'member')
 	const today = dayjs();
 	const maxDate = today.valueOf();
