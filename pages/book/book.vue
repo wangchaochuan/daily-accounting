@@ -12,13 +12,13 @@
 					<u-avatar-group :urls="getUrls(book)" size="36" gap="0.2"></u-avatar-group>
 				</view>
 				<view class="footer">
-					<view class="delete" v-show="book._id!==activeBook">
+					<view class="delete" v-show="book._id!==activeBook && books.length>1">
 						<u-button @click="showDeleteModal(book)">删除</u-button>
 					</view>
 					<view class="edit" v-if="book.creator===userId">
 						<u-button @click="editBook(book)">编辑</u-button>
 					</view>
-					<view class="edit" v-else>
+					<view class="edit" v-if="book.creator!==userId && books.length>1">
 						<u-button @click="quitBook(book)">退出</u-button>
 					</view>
 					<view class="invite" v-if="book.type==='public'">
@@ -110,8 +110,9 @@
 		const index = members.findIndex(v => v.id === userId.value)
 		if (index > -1) {
 			members.splice(index, 1);
+			const ids = members.map(v => v.id)
 			await CO.updateBook(id, {
-				members
+				members: ids
 			})
 			loadBooks(userId.value)
 		}
@@ -139,6 +140,10 @@
 					}))
 				}
 			})
+			const index = response.data.findIndex(v => v._id === activeBook.value)
+			if (index < 0) {
+				activeBook.value = response.data?.[0]?._id;
+			}
 		}
 	}
 
