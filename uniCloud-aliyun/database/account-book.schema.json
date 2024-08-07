@@ -1,63 +1,94 @@
 // 文档教程: https://uniapp.dcloud.net.cn/uniCloud/schema
 {
-	"bsonType": "object",
-	"description": "青牛记账-账本表",
-	"required": ["creator", "type", "name"],
-	"permission": {
-		"read": true,
-		"create": true,
-		"update": true,
-		"delete": true
-	},
-	"properties": {
-		"_id": {
-			"description": "ID，系统自动生成"
-		},
-		"type": {
-			"bsonType": "string",
-			"defaultValue": "private",
-			"description": "分类：private-私人账本 public-共享账本",
-			"enum": [{
-				"text": "私人账本",
-				"value": "private"
-			}, {
-				"text": "共享账本",
-				"value": "public"
-			}],
-			"title": "分类"
-		},
-		"name": {
-			"bsonType": "string",
-			"description": "账本名称"
-		},
-		"creator": {
-			"bsonType": "string",
-			"foreignKey": "account-users._id",
-			"description": "账本创建者"
-		},
-		"members": {
-			"bsonType": "array",
-			"arrayType": "object",
-			"properties": {
-				"id": {
-					"bsonType": "string",
-					"description": "成员的用户id"
-				}
-			},
-			"description": "关联用户,私人账本仅为创建者可见,共享账本可邀请用户一起编辑、查看，仅创建者有权删除",
-			"defaultValue": []
-		},
-		"expendClassify": {
-			"bsonType": "array",
-			"arrayType": "string",
-			"description": "支出分类",
-			"defaultValue": ["餐饮", "买菜", "水果", "宝宝", "网购", "交通", "居家", "医疗", "零食", "房贷", "房租", "其他"]
-		},
-		"incomeClassify": {
-			"bsonType": "array",
-			"arrayType": "string",
-			"description": "收入分类",
-			"defaultValue": ["工资", "奖金", "理财", "兼职", "人情", "转账", "红包", "其他"]
-		}
-	}
+  "bsonType": "object",
+  "description": "青牛记账-账本表",
+  "required": ["creator", "type", "name"],
+  "permission": {
+    "read": true,
+    "create": true,
+    "update": true,
+    "delete": true
+  },
+  "properties": {
+    "_id": {
+      "description": "ID，系统自动生成"
+    },
+    "type": {
+      "bsonType": "string",
+      "defaultValue": "private",
+      "description": "分类：private-私人账本 public-共享账本",
+      "enum": [
+        {
+          "text": "私人账本",
+          "value": "private"
+        },
+        {
+          "text": "共享账本",
+          "value": "public"
+        }
+      ],
+      "title": "分类"
+    },
+    "name": {
+      "bsonType": "string",
+      "description": "账本名称"
+    },
+    "creator": {
+      "bsonType": "string",
+      "foreignKey": "account-users._id",
+      "description": "账本创建者"
+    },
+    "members": {
+      "bsonType": "array",
+      "arrayType": "object",
+      "properties": {
+        "id": {
+          "bsonType": "string",
+          "description": "成员的用户id"
+        }
+      },
+      "description": "关联用户,私人账本仅为创建者可见,共享账本可邀请用户一起编辑、查看，仅创建者有权删除",
+      "defaultValue": []
+    },
+    "expendClassify": {
+      "bsonType": "array",
+      "arrayType": "string",
+      "description": "支出分类",
+      "defaultValue": [
+        "餐饮",
+        "买菜",
+        "水果",
+        "宝宝",
+        "网购",
+        "交通",
+        "居家",
+        "医疗",
+        "零食",
+        "房贷",
+        "房租",
+        "其他"
+      ]
+    },
+    "incomeClassify": {
+      "bsonType": "array",
+      "arrayType": "string",
+      "description": "收入分类",
+      "defaultValue": [
+        "工资",
+        "奖金",
+        "理财",
+        "兼职",
+        "人情",
+        "转账",
+        "红包",
+        "其他"
+      ]
+    },
+    "tagList": {
+      "bsonType": "array",
+      "arrayType": "string",
+      "description": "标签列表",
+      "defaultValue": []
+    }
+  }
 }

@@ -52,7 +52,14 @@
           ></u-input>
         </u-form-item>
         <u-form-item label="标签" prop="tag">
-          <u-input placeholder="请输入标签" v-model="model.tag"></u-input>
+          <autocomplete
+            placeholder="请输入标签"
+            :value="model.tag"
+            @select="onSelect"
+            :options="tagList"
+            ref="tagRef"
+          >
+          </autocomplete>
         </u-form-item>
         <u-form-item label="备注" prop="remark">
           <u-input placeholder="请输入备注" v-model="model.remark"></u-input>
@@ -82,10 +89,17 @@
 
 <script setup>
 import { ref, reactive, onMounted, computed } from "vue";
+import { updateTagList } from "@/service/book.js";
 import dayjs from "dayjs";
 import classifyComponent from "./classify.vue";
+import autocomplete from "./autocomplete.vue";
 import useUserStore from "@/store/user.js";
 import useBookStore from "@/store/book.js";
+
+const onSelect = (val) => {
+  model.tag = val;
+};
+const tagRef = ref();
 
 const props = defineProps({
   visible: {
@@ -113,6 +127,10 @@ const expendClassifyList = computed(() => {
 const incomeClassifyList = computed(() => {
   if (!bookStore.currentBook) return [];
   return bookStore.currentBook.incomeClassify;
+});
+const tagList = computed(() => {
+  if (!bookStore.currentBook?.tagList) return [];
+  return bookStore.currentBook.tagList;
 });
 const emits = defineEmits(["close", "success"]);
 const type = ref("expend");
@@ -165,6 +183,7 @@ const reset = () => {
   model.amount = undefined;
   model.tag = "";
   model.remark = "";
+  tagRef.value.clear();
 };
 const confirm = async () => {
   await formRef.value?.validate();
@@ -176,6 +195,7 @@ const confirm = async () => {
     tag: model.tag,
     remark: model.remark,
   };
+
   if (props.mode === "create") {
     const data = {
       ...params,
@@ -209,6 +229,25 @@ const confirm = async () => {
       });
     }
   }
+  const tags = [...tagList.value];
+  if (!tags.includes(model.tag)) {
+    tags.push(model.tag);
+    await updateTagList(bookId.value, tags);
+    const response = await CO.getBooks(userId.value);
+    if (Array.isArray(response.data)) {
+      const list = response.data.map((v) => {
+        return {
+          ...v,
+          members: v.members.map((m) => ({
+            id: m._id,
+            name: m.nick_name,
+            url: m.avatar?.url,
+          })),
+        };
+      });
+      bookStore.setBooks(list);
+    }
+  }
   emits("success");
   reset();
   close();
@@ -224,6 +263,7 @@ const open = () => {
     model.amount = data.amount;
     model.tag = data.tag;
     model.remark = data.remark;
+    tagRef.value.setText(data.tag);
   } else {
     classifyList.value = expendClassifyList.value;
     classify.value = expendClassifyList.value?.[0];
