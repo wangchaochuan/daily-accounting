@@ -45,11 +45,10 @@
           </view>
         </u-form-item>
         <u-form-item label="金额" prop="amount" required>
-          <u-input
-            type="digit"
-            placeholder="请输入金额"
+          <calculate-component
             v-model="model.amount"
-          ></u-input>
+            placeholder="请输入金额"
+          ></calculate-component>
         </u-form-item>
         <u-form-item label="标签" prop="tag">
           <autocomplete
@@ -92,6 +91,7 @@ import { ref, reactive, onMounted, computed } from "vue";
 import { updateTagList } from "@/service/book.js";
 import dayjs from "dayjs";
 import classifyComponent from "./classify.vue";
+import calculateComponent from "./calculate.vue";
 import autocomplete from "./autocomplete.vue";
 import useUserStore from "@/store/user.js";
 import useBookStore from "@/store/book.js";

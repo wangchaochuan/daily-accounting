@@ -51,6 +51,7 @@ const handleSelect = (val) => {
   text.value = val;
   nextTick(() => {
     list.value = [];
+    emits("select", val);
   });
 };
 const onchange = (val) => {
